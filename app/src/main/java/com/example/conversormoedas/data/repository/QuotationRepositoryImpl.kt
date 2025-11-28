@@ -3,11 +3,11 @@ package com.example.conversormoedas.data.repository
 import com.example.conversormoedas.data.models.PriceHistory
 import com.example.conversormoedas.data.models.Quotation
 import com.example.conversormoedas.data.models.QuotationApiService
+import com.example.conversormoedas.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import okio.IOException
 import retrofit2.HttpException
-import com.example.conversormoedas.util.Resource
+import java.io.IOException
 
 // Implementação do QuotationRepository que lida com a lógica de buscar dados da API.
 class QuotationRepositoryImpl(
@@ -29,7 +29,7 @@ class QuotationRepositoryImpl(
             val filteredList = if (query.isNotBlank()) {
                 domainList.filter {
                     it.name.contains(query, ignoreCase = true) ||
-                            it.symbol.contains(query, ignoreCase = true)
+                    it.symbol.contains(query, ignoreCase = true)
                 }
             } else {
                 domainList
