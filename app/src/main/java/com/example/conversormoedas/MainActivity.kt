@@ -10,19 +10,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.conversormoedas.presentation.explore.ExploreScreen
 import com.example.conversormoedas.ui.theme.QuotationAppTheme
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
@@ -79,28 +85,28 @@ fun MainAppScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             // Pesquisa e lista principal
-            composable(Screen.Explore.route) { ExploreScreen(NavController) }
+            composable(Screen.Explore.route) { ExploreScreen(navController) }
             // Tela de favoritos, apenas contações marcadas
             composable(Screen.Favorites.route) { FavoritesScreen() }
             // Configuração e histórico de alertas
             composable(Screen.Alerts.route) { AlertsScreen() }
 
             composable("detail/{quotationId}") { backStackEntry ->
-                val quotationId = backStackEntry.arguments?.getString("quotationId") ?: return@composable
+                val id = backStackEntry.arguments?.getString("quotationId") ?: return@composable
                 DetailScreen(quotationId = id)
             }
         }
     }
 }
 
-@Composable
+/*@Composable
 fun ExploreScreen(navController: NavController.Companion) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Button(onClick = { navController.navigate("detail/bitcoin") }) {
             Text("Explorar - Clique para Detalhes")
         }
     }
-}
+}*/
 
 @Composable
 fun FavoritesScreen() {
@@ -123,16 +129,10 @@ fun DetailScreen(quotationId: String) {
     }
 }
 
-// TODO: Criar package ui.theme e arquivo Theme.kt
 @Preview(showBackground = true)
 @Composable
 fun MainAppPreview() {
     QuotationAppTheme {
         MainAppScreen()
     }
-}
-
-@Composable
-fun QuotationAppTheme(content: @Composable () -> Unit) {
-    TODO("Not yet implemented")
 }
