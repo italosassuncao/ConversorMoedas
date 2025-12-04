@@ -1,4 +1,4 @@
-# 💰 QuotationApp: Cotação em Tempo Real (Crypto, Moedas e Ações)
+# 💰 Conversor de Moedas: Cotação em Tempo Real (Crypto, Moedas e Ações)
 
 Este projeto é um aplicativo Android nativo desenvolvido em **Kotlin** e **Jetpack Compose**, oferecendo cotações de mercado em tempo real, histórico de preços, busca otimizada, sistema de favoritos e alertas personalizados.
 
