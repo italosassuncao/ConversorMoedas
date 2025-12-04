@@ -69,6 +69,8 @@ dependencies {
     // Koin para Compose
     implementation(libs.koin.androidx.compose)
 
+    implementation(libs.coil.compose)
+
     annotationProcessor(libs.dagger.compiler)
     ksp(libs.dagger.compiler)
 

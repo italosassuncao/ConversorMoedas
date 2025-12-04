@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import coil.compose.rememberAsyncImagePainter
 import com.example.conversormoedas.data.models.Quotation
 import java.text.DecimalFormat
@@ -60,12 +61,12 @@ fun QuotationItem(
         ) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val pointer = rememberAsyncImagePointer(
+                val painter = rememberAsyncImagePainter(
                     model = quotation.imageUrl
                         ?: "https://placehold.co/40x40/aaaaaa/ffffff?text=${quotation.symbol}"
                 )
                 Image(
-                    pointer = pointer,
+                    painter = painter,
                     contentDescription = "${quotation.name} Icon",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

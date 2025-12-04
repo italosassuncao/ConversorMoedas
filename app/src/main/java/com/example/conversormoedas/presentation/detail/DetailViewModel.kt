@@ -12,7 +12,7 @@ import com.example.conversormoedas.util.Resource
 import kotlinx.coroutines.launch
 
 // Constante para a chave do ID
-private const val QUOTATION_ID_KEY = "quotatioId"
+private const val QUOTATION_ID_KEY = "quotationId"
 
 class DetailViewModel(
     private val repository: QuotationRepository,
@@ -81,7 +81,7 @@ class DetailViewModel(
 }
 
 data class DetailState(
-    val quotatioId: String = "",
+    val quotationId: String = "",
     val name: String = "Carregando...",
     val historyData: List<PriceHistory> = emptyList(),
     val isLoading: Boolean = false,

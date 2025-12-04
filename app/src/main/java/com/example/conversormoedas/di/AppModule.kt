@@ -1,6 +1,5 @@
 package com.example.conversormoedas.di
 
-import com.example.conversormoedas.data.models.QuotationApiService
 import com.example.conversormoedas.data.repository.QuotationRepository
 import com.example.conversormoedas.data.repository.QuotationRepositoryImpl
 import com.example.conversormoedas.presentation.explore.ExploreViewModel
@@ -12,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import com.example.conversormoedas.data.models.QuotationApiService
 
 // URL Base da CoinGecko
 private const val BASE_URL_CRYPTO = "https://api.coingecko.com/api/v3/"

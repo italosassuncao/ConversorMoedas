@@ -4,8 +4,8 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
 // Paleta de Cores para Modo Escuro
 private val DarkColorScheme = darkColorScheme(

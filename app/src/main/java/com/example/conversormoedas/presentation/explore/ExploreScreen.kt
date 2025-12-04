@@ -15,6 +15,7 @@ import org.koin.androidx.compose.koinViewModel
 
 // Componente Composable para a tela principal de Exploração.
 // Usa o ExploreViewModel injetado pelo Koin.
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreScreen(
     navController: NavController,
@@ -25,10 +26,12 @@ fun ExploreScreen(
 
     Scaffold(
         topBar = {
-            title = { Text("Explorar Mercados") },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background,
-                titleContentColor = MaterialTheme.colorScheme.primary
+            TopAppBar(
+                title = { Text("Explorar Mercados") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     ) { paddingValues ->
