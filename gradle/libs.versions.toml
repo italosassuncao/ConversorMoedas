@@ -18,6 +18,9 @@ okhttpLoggingVersion = "5.3.2"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 retrofitVersion = "3.0.0"
 coil = "2.6.0"
+roomCompiler = "2.8.4"
+roomCommonJvm = "2.8.4"
+roomRuntimeJvm = "2.8.4"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
@@ -50,6 +53,9 @@ logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", ver
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+androidx-room-runtime-jvm = { group = "androidx.room", name = "room-runtime-jvm", version.ref = "roomRuntimeJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
