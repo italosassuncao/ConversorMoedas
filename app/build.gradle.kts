@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.koin.androidx.compose)
 
     implementation(libs.coil.compose)
+    implementation(libs.androidx.room.compiler)
 
     annotationProcessor(libs.dagger.compiler)
     ksp(libs.dagger.compiler)

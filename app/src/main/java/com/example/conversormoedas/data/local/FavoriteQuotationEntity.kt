@@ -9,11 +9,10 @@ data class FavoriteQuotationEntity(
     @PrimaryKey val id: String,
     val name: String,
     val symbol: String,
+    val imageUrl: String?
 )
 
-// Funções de extensão para mapear entre o modelo de domínio e entidade de banco de dados
-
-// Converte um modelo de domínio em uma entidade Room
+// Converte um modelo de Domínio (API) em uma Entidade Room (Local).
 fun Quotation.toFavoriteEntity(): FavoriteQuotationEntity {
     return FavoriteQuotationEntity(
         id = id,
@@ -23,7 +22,7 @@ fun Quotation.toFavoriteEntity(): FavoriteQuotationEntity {
     )
 }
 
-// Conversão de uma entidade Room para um modelo de domínio
+// Converte uma Entidade Room (Local) em um modelo de Domínio (API).
 fun FavoriteQuotationEntity.toQuotation(): Quotation {
     return Quotation(
         id = id,
