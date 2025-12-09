@@ -1,5 +1,6 @@
 package com.example.conversormoedas.data.local
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.conversormoedas.data.models.Quotation
 
