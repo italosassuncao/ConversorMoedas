@@ -62,4 +62,20 @@ class QuotationRepositoryImpl(
         }
     }
 
+    override suspend fun addQuotationToFavorites(quotation: Quotation) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeQuotationFromFavorites(quotationId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun isQuotationFavorite(quotationId: String): Flow<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getFavoriteQuotations(): Flow<List<Quotation>> {
+        TODO("Not yet implemented")
+    }
+
 }

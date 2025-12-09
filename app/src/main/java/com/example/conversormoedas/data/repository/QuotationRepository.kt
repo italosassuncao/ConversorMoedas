@@ -20,7 +20,14 @@ interface QuotationRepository {
      */
     suspend fun getPriceHistory(id: String): Resource<List<PriceHistory>>
 
-    // Operações futuras para Favoritos (Room)
-    // suspend fun addToFavorites(quotation: Quotation)
-    // fun getFavorites(): Flow<List<Quotation>>
+    // Adiciona uma cotação à lista de favoritos
+    suspend fun addQuotationToFavorites(quotation: Quotation)
+
+    // Remove uma cotação da lista de favoritos
+    suspend fun removeQuotationFromFavorites(quotationId: String)
+
+    fun isQuotationFavorite(quotationId: String): Flow<Boolean>
+
+    fun getFavoriteQuotations(): Flow<List<Quotation>>
+
 }
