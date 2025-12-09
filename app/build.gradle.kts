@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21"
-    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    id("com.google.devtools.ksp") version "2.3.3"
 }
 
 android {
@@ -42,46 +42,58 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15-dev-k2.0.21-394d21e30d9"
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx.v1120)
-    implementation(libs.androidx.lifecycle.runtime.ktx.v262)
+    // Core Android e Kotlin
+    implementation(libs.core.ktx.v1120)
+    implementation(libs.lifecycle.runtime.ktx.v262)
 
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons.extended)
+    // Jetpack Compose
+    implementation(libs.androidx.activity.compose.v181)
+    implementation(platform(libs.androidx.compose.bom.v20230300))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
 
-    implementation(libs.retrofit)
+    // Compose Navigation
+    implementation(libs.androidx.navigation.compose.v275)
+
+    // Networking (Retrofit e Serialização)
+    val retrofitVersion = "2.9.0"
+    val okhttpLoggingVersion = "4.11.0"
+    implementation(libs.retrofit.v290)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.logging.interceptor)
+    implementation(libs.kotlinx.serialization.json.v160)
+    implementation(libs.logging.interceptor.v4110)
 
     // Injeção de Dependência (Koin)
-    implementation(libs.koin.android)
-    // Koin para Compose
-    implementation(libs.koin.androidx.compose)
+    val koinVersion = "3.4.3"
+    implementation(libs.koin.android.v343)
+    implementation(libs.koin.androidx.compose.v343)
 
-    implementation(libs.coil.compose)
-    implementation(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.common.jvm)
-    implementation(libs.androidx.room.runtime.jvm)
 
-    annotationProcessor(libs.dagger.compiler)
-    ksp(libs.dagger.compiler)
+    // Database (Room) para Favoritos e Histórico (ATUALIZADO)
+    val roomVersion = "2.6.0"
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx) // Suporte a Coroutines
+    // 2. ADICIONAR O COMPILADOR DO ROOM USANDO KSP
+    ksp(libs.androidx.room.compiler.v260)
 
+    // Testes
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit.v115)
+    androidTestImplementation(libs.androidx.espresso.core.v351)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
