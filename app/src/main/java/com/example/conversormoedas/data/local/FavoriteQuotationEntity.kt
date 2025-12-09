@@ -1,6 +1,5 @@
 package com.example.conversormoedas.data.local
 
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.conversormoedas.data.models.Quotation
 
@@ -9,7 +8,6 @@ data class FavoriteQuotationEntity(
     @PrimaryKey val id: String,
     val name: String,
     val symbol: String,
-    val imageUrl: String?
 )
 
 // Funções de extensão para mapear entre o modelo de domínio e entidade de banco de dados
