@@ -48,40 +48,41 @@ android {
 
 dependencies {
     // Core Android e Kotlin
-    implementation("androidx.core:core-ktx:1.17.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v262)
 
     // Jetpack Compose
-    implementation("androidx.activity:activity-compose:1.12.1")
-    implementation(platform("androidx.compose:compose-bom:2025.12.00"))
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
     // Compose Navigation
-    implementation("androidx.navigation:navigation-compose:2.9.6")
+    implementation(libs.androidx.navigation.compose)
 
     // Networking (Retrofit e Serialização)
     val retrofitVersion = "3.0.0"
     val okhttpLoggingVersion = "5.3.2"
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpLoggingVersion")
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.logging.interceptor)
 
     // Injeção de Dependência (Koin)
     val koinVersion = "4.1.1"
     implementation(libs.koin.android)
-    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
+    implementation(libs.koin.androidx.compose)
 
 
     // Database (Room) para Favoritos e Histórico (ATUALIZADO)
     val roomVersion = "2.8.4"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion") // Suporte a Coroutines
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx) // Suporte a Coroutines
 
-    ksp("androidx.room:room-compiler:$roomVersion")
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

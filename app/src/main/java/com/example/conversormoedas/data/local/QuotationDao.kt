@@ -12,7 +12,7 @@ interface QuotationDao {
     suspend fun insertFavorite(quotation: FavoriteQuotationEntity)
 
     @Query("DELETE FROM favorite_quotations WHERE id = :quotationId")
-    suspend fun deleteFavorite(quotatioId: String)
+    suspend fun deleteFavorite(quotationId: Long)
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorite_quotations WHERE id = :quotationId)")
     fun isFavorite(quotationId: String): Flow<Boolean>

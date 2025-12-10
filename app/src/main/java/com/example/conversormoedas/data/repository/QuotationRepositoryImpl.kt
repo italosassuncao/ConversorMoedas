@@ -11,7 +11,8 @@ import java.io.IOException
 
 // Implementação do QuotationRepository que lida com a lógica de buscar dados da API.
 class QuotationRepositoryImpl(
-    private val apiService: QuotationApiService
+    private val apiService: QuotationApiService,
+    quotationDao: Any
 ) : QuotationRepository {
 
     /**
