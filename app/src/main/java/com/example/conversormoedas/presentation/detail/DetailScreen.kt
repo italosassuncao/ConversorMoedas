@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -61,10 +62,13 @@ fun DetailScreen(
                 },
                 actions = {
                     // Botao favorito
-                    IconButton(onClick = { /* viewModel.toggleFavorite() */ }) {
-                        Icon(Icons.Filled.FavoriteBorder,
-                            contentDescription = "Adicionar aos Favoritos")
-                    }
+                    Icon(
+                        // Escolhe o ícone baseado no estado isFavorite
+                        imageVector = if (state.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = if (state.isFavorite) "Remover dos Favoritos" else "Adicionar aos Favoritos",
+                        // Aplica a cor primária se for favorito
+                        tint = if (state.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                    )
                 }
             )
         }
@@ -151,13 +155,10 @@ fun DetailScreen(
                     elevation = CardDefaults.cardElevation(2.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text("Detalhes do Ativo", style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.SemiBold)
+                        Text("Detalhes do Ativo", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("ID: $quotationId")
-                        Text("Moeda Base: USD")
-                        Text("Fonte de Dados: CoinGecko")
-                        // Aqui podem vir Market Cap, Volume 24h, etc.
+                        Text("ID: ${state.quotationId}")
+                        Text("Status de Favorito: ${if (state.isFavorite) "Sim" else "Não"}")
                     }
                 }
             }
