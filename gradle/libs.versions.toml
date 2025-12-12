@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.1"
+agp = "8.13.2"
 coreKtxVersion = "1.17.0"
 daggerCompiler = "2.57.2"
 koinVersion = "4.1.1"
