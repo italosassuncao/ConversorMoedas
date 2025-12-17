@@ -9,6 +9,8 @@ import com.italo.conversormoedas.data.repository.QuotationRepositoryImpl
 import com.italo.conversormoedas.presentation.detail.DetailViewModel
 import com.italo.conversormoedas.presentation.explore.ExploreViewModel
 import com.italo.conversormoedas.presentation.favorites.FavoritesViewModel
+import com.italo.conversormoedas.util.ApiConstants
+import com.italo.conversormoedas.util.ApiConstants.BASE_URL_CRYPTO
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -16,13 +18,18 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 /**
- * Módulo Koin que define todas as dependências do aplicativo.
+ * Qualifiers para diferenciar as instâncias Retrofit
  */
+private val CRYPTO_RETROFIT = named("CryptoRetrofit")
+private val ALPHA_RETROFIT = named("AlphaRetrofit")
+
+// Módulo de Injeção de Dependência Koin.
 val appModule = module {
 
     // --- SEÇÃO DE REDE (Networking) ---
@@ -44,10 +51,22 @@ val appModule = module {
             .build()
     }
 
-    single {
+    // Instância Retrofit para CoinGecko (CRYPTO)
+    single(CRYPTO_RETROFIT) {
         Retrofit.Builder()
-            .baseUrl("https://api.coingecko.com/api/v3/")
-            .client(get<OkHttpClient>()) // Tipo explícito adicionado
+            .baseUrl(ApiConstants.BASE_URL_CRYPTO)
+            .client(get<OkHttpClient>())
+            .addConverterFactory(
+                get<Json>().asConverterFactory("application/json".toMediaType())
+            )
+            .build()
+    }
+
+    // Instância Retrofit para AlphaVantage (AÇÕES/FOREX)
+    single(ALPHA_RETROFIT) {
+        Retrofit.Builder()
+            .baseUrl(ApiConstants.BASE_URL_ALPHA)
+            .client(get<OkHttpClient>())
             .addConverterFactory(
                 get<Json>().asConverterFactory("application/json".toMediaType())
             )
@@ -55,7 +74,7 @@ val appModule = module {
     }
 
     single {
-        get<Retrofit>().create(QuotationApiService::class.java)
+        get<Retrofit>(CRYPTO_RETROFIT).create(QuotationApiService::class.java)
     }
 
     single {

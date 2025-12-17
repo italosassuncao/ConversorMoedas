@@ -1,5 +1,6 @@
 package com.italo.conversormoedas.data.models
 
+import com.italo.conversormoedas.util.ApiConstants
 import kotlinx.serialization.Serializable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -29,6 +30,7 @@ data class PriceHistory (
  */
 interface QuotationApiService {
 
+    // --- CoinGecko Endpoints (Crypto) ---
     @GET("coins/markets")
     suspend fun getCryptoQuotations(
         @Query("vs_currency") currency: String = "usd",
@@ -43,6 +45,20 @@ interface QuotationApiService {
         @Query("vs_currency") currency: String = "usd",
         @Query("days") days: Int = 30
     ): HistoryResponse
+
+    // --- AlphaVantage Endpoints (Ações e Forex) ---
+    @GET("query?function=GLOBAL_QUOTE")
+    suspend fun getStockQuote(
+        @Query("symbol") symbol: String,
+        @Query("apikey") apiKey: String = ApiConstants.ALPHA_VANTAGE_API_KEY
+    ): AlphaVantageQuoteResponse
+
+    @GET("query?function=CURRENCY_EXCHANGE_RATE")
+    suspend fun getForexQuote(
+        @Query("from_symbol") fromSymbol: String,
+        @Query("to_symbol") toSymbol: String,
+        @Query("apikey") apiKey: String = ApiConstants.ALPHA_VANTAGE_API_KEY
+    ): AlphaVantageQuoteResponse
 
 }
 
