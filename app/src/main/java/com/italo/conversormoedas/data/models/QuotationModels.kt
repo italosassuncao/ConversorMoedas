@@ -1,6 +1,7 @@
 package com.italo.conversormoedas.data.models
 
 import com.italo.conversormoedas.util.ApiConstants
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,6 +16,67 @@ data class Quotation (
     val priceChange24h: Double,
     val imageUrl: String? = null
 )
+
+// Modelo de resposta para busca no CoinGecko
+
+@Serializable
+data class CoinGeckoSearchResponse(
+    @SerialName("coins")
+    val coins: List<CoinGeckoSearchCoin> = emptyList()
+)
+
+@Serializable
+data class CoinGeckoSearchCoin(
+    @SerialName("id")
+    val id: String,
+    @SerialName("name")
+    val name: String,
+    @SerialName("symbol")
+    val symbol: String,
+    @SerialName("large")
+    val imageUrl: String? = null
+) {
+    fun toQuotation(): Quotation {
+        return Quotation(
+            id = id,
+            name = name,
+            symbol = symbol,
+            imageUrl = imageUrl,
+            currentPrice = 0.0,
+            priceChange24h = 0.0
+        )
+    }
+}
+
+// Modelo de resposta para busca no Alpha Vantage
+@Serializable
+data class AlphaVantageSearchResponse(
+    @SerialName("bestMatches")
+    val bestMatches: List<AlphaVantageSymbolMatch> = emptyList()
+)
+
+@Serializable
+data class AlphaVantageSymbolMatch(
+    @SerialName("1. symbol")
+    val symbol: String,
+    @SerialName("2. name")
+    val name: String,
+    @SerialName("3. type")
+    val type: String,
+    @SerialName("4. region")
+    val region: String
+) {
+    fun toQuotation(): Quotation {
+        return Quotation(
+            id = symbol,
+            name = name,
+            symbol = symbol,
+            imageUrl = null,
+            currentPrice = 0.0,
+            priceChange24h = 0.0
+        )
+    }
+}
 
 /**
  * Modelo de dados para o Histórico de preços (usado para gráficos).
@@ -39,14 +101,25 @@ interface QuotationApiService {
         @Query("page") page: Int = 1
     ): List<QuotationResponse>
 
+    @GET("search")
+    suspend fun searchCrypto(
+        @Query("query") query: String
+    ): CoinGeckoSearchResponse
+
     @GET("coins/{id}/market_chart")
     suspend fun getPriceHistory(
         @retrofit2.http.Path("id") id: String,
         @Query("vs_currency") currency: String = "usd",
-        @Query("days") days: Int = 30
+        @Query("days") days: Int = 7
     ): HistoryResponse
 
     // --- AlphaVantage Endpoints (Ações e Forex) ---
+    @GET("query?function=SYMBOL_SEARCH")
+    suspend fun searchSymbols(
+        @Query("keywords") keywords: String,
+        @Query("apikey") apiKey: String = ApiConstants.ALPHA_VANTAGE_API_KEY
+    ): AlphaVantageSearchResponse
+
     @GET("query?function=GLOBAL_QUOTE")
     suspend fun getStockQuote(
         @Query("symbol") symbol: String,

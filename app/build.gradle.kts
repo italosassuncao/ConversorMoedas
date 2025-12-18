@@ -65,6 +65,7 @@ dependencies {
 
     // Compose Navigation
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.work.runtime.ktx)
 
     // Networking (Retrofit e Serialização)
     val retrofitVersion = "3.0.0"
@@ -81,10 +82,8 @@ dependencies {
 
 
     // Database (Room) para Favoritos e Histórico (ATUALIZADO)
-    val roomVersion = "2.8.4"
     implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx) // Suporte a Coroutines
-
+    implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)

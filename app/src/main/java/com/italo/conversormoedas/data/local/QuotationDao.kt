@@ -1,10 +1,20 @@
 package com.italo.conversormoedas.data.local
 
 import androidx.room.Dao
+import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+
+@Entity(tableName = "favorite_quotations")
+data class FavoriteQuotationEntity(
+    @PrimaryKey val id: String,
+    val name: String,
+    val symbol: String,
+    val imageUrl: String?
+)
 
 @Dao
 interface QuotationDao {

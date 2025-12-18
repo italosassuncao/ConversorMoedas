@@ -17,131 +17,86 @@ import java.io.IOException
 // Implementação do QuotationRepository que lida com a lógica de buscar dados da API.
 class QuotationRepositoryImpl(
     private val apiService: QuotationApiService,
-    private val quotationDao: QuotationDao
+    private val quotationDao: QuotationDao // Injeção correta do DAO
 ) : QuotationRepository {
 
-    // Lista de ativos fixos
-    private val fixedAssets = listOf(
-        Pair("AAPL", "Apple Inc."),      // Ação
-        Pair("MSFT", "Microsoft Corp."),  // Ação
-        Pair("EUR", "USD"),              // Forex EUR/USD
-        Pair("USD", "BRL")               // Forex USD/BRL
-    )
-
-    // --- MÉTODOS DE DADOS REMOTOS (API) ---
-
+    /**
+     * Obtém cotações com lógica de busca inteligente para economizar memória e dados.
+     */
     override fun getTrendingQuotations(query: String): Flow<Resource<List<Quotation>>> = flow {
         emit(Resource.Loading())
 
         try {
-            // Busca Crypto (CoinGecko)
-            val cryptoResponse = apiService.getCryptoQuotations(currency = "usd")
-            val cryptoList = cryptoResponse.map { it.toDomain() }
-
-            // Busca Ações/Forex (AlphaVantage)
-            val alphaList = mutableListOf<Quotation>()
-            for (asset in fixedAssets) {
-                val quote = if (asset.second.contains('/')) {
-                    getAlphaForexQuote(asset.first, asset.second)
-                } else {
-                    getAlphaStockQuote(asset.first, asset.second)
-                }
-                if (quote is Resource.Success && quote.data != null) {
-                    alphaList.add(quote.data)
-                }
-            }
-
-            // Mescla as listas
-            val mergedList = (cryptoList + alphaList).shuffled()
-
-            // Aplica filtro de busca
-            val filteredList = if (query.isNotBlank()) {
-                mergedList.filter {
-                    it.name.contains(query, ignoreCase = true) ||
-                            it.symbol.contains(query, ignoreCase = true)
-                }
+            if (query.isBlank()) {
+                // Termo de busca vazio -> Carrega tendências (Top 20 do mercado)
+                val response = apiService.getCryptoQuotations(perPage = 20)
+                val trendingList = response.map { it.toDomain() }
+                emit(Resource.Success(trendingList))
             } else {
-                mergedList
+                // Busca ativa -> Utiliza endpoints de pesquisa das APIs
+                val searchResults = mutableListOf<Quotation>()
+
+                // Busca Criptomoedas na CoinGecko
+                val cryptoSearch = apiService.searchCrypto(query)
+                val cryptoQuotations = cryptoSearch.coins.take(10).map { it.toQuotation() }
+                searchResults.addAll(cryptoQuotations)
+
+                // Busca Ações/Símbolos na AlphaVantage
+                val stockSearch = apiService.searchSymbols(query)
+                val stockQuotations = stockSearch.bestMatches.take(5).map { it.toQuotation() }
+                searchResults.addAll(stockQuotations)
+
+                emit(Resource.Success(searchResults))
             }
-
-            emit(Resource.Success(filteredList))
-
         } catch (e: HttpException) {
-            emit(Resource.Error("Erro HTTP ao buscar dados de mercado: ${e.message()}"))
+            emit(Resource.Error("Erro no servidor: ${e.message()}"))
         } catch (e: IOException) {
-            emit(Resource.Error("Erro de rede. Verifique sua conexão."))
+            emit(Resource.Error("Sem conexão com a internet."))
         } catch (e: Exception) {
-            emit(Resource.Error("Ocorreu um erro desconhecido: ${e.localizedMessage}"))
+            emit(Resource.Error("Ocorreu um erro inesperado: ${e.localizedMessage}"))
         }
     }
+
+    // PERSISTÊNCIA ROOM
 
     /**
-     * Função interna para buscar cotação de Ações.
+     * Salva uma cotação no banco de dados local.
      */
-    private suspend fun getAlphaStockQuote(symbol: String, name: String): Resource<Quotation> {
-        return try {
-            val response = apiService.getStockQuote(symbol)
-            val quotation = response.globalQuote?.toQuotation(symbol, name, symbol)
-            if (quotation != null) {
-                Resource.Success(quotation)
-            } else {
-                Resource.Error("Dados de ações incompletos para $symbol")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Falha ao buscar cotação de ações $symbol")
-        }
-    }
-
-    /**
-     * Função interna para buscar cotação de Moedas (Forex).
-     */
-    private suspend fun getAlphaForexQuote(fromSymbol: String, toSymbol: String): Resource<Quotation> {
-        return try {
-            val response = apiService.getForexQuote(fromSymbol, toSymbol)
-            val id = "$fromSymbol/$toSymbol"
-            val quotation = response.exchangeRate?.toQuotation(id, fromSymbol, toSymbol)
-            if (quotation != null) {
-                Resource.Success(quotation)
-            } else {
-                Resource.Error("Dados de Forex incompletos para $id")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Falha ao buscar cotação Forex $fromSymbol/$toSymbol")
-        }
-    }
-
-    override suspend fun getPriceHistory(id: String): Resource<List<PriceHistory>> {
-
-        return try {
-            if (!id.contains('/')) {
-                val response = apiService.getPriceHistory(id = id)
-                Resource.Success(response.toDomain())
-            } else {
-                Resource.Error("Histórico de Ações/Forex ainda não implementado.")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Ocorreu um erro desconhecido ao buscar histórico: ${e.localizedMessage}")
-        }
-    }
-
-    // --- MÉTODOS DE DADOS LOCAIS (ROOM) ---
-
     override suspend fun addQuotationToFavorites(quotation: Quotation) {
         quotationDao.insertFavorite(quotation.toFavoriteEntity())
     }
 
+    /**
+     * Remove uma cotação do banco de dados local.
+     */
     override suspend fun removeQuotationFromFavorites(quotationId: String) {
         quotationDao.deleteFavorite(quotationId)
     }
 
+    /**
+     * Verifica em tempo real se um item é favorito.
+     */
     override fun isQuotationFavorite(quotationId: String): Flow<Boolean> {
         return quotationDao.isFavorite(quotationId)
     }
 
+    /**
+     * Lista todos os favoritos persistidos no SQLite.
+     */
     override fun getFavoriteQuotations(): Flow<List<Quotation>> {
         return quotationDao.getAllFavorites().map { entities ->
             entities.map { it.toQuotation() }
         }
     }
 
+    // HISTÓRICO DE PREÇOS
+
+    override suspend fun getPriceHistory(id: String): Resource<List<PriceHistory>> {
+        return try {
+            val response = apiService.getPriceHistory(id = id)
+            Resource.Success(response.toDomain())
+        } catch (e: Exception) {
+            Resource.Error("Histórico indisponível no momento.")
+        }
+    }
 }

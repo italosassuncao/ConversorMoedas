@@ -10,7 +10,6 @@ import com.italo.conversormoedas.presentation.detail.DetailViewModel
 import com.italo.conversormoedas.presentation.explore.ExploreViewModel
 import com.italo.conversormoedas.presentation.favorites.FavoritesViewModel
 import com.italo.conversormoedas.util.ApiConstants
-import com.italo.conversormoedas.util.ApiConstants.BASE_URL_CRYPTO
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
