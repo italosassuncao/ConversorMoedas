@@ -6,26 +6,25 @@ Este projeto é um aplicativo Android nativo desenvolvido em **Kotlin** e **Jetp
 
 ## 🛠️ Tecnologias e Ferramentas
 
-O aplicativo utiliza tecnologias modernas do ecossistema Android:
+O aplicativo foi construído utilizando as seguintes tecnologias modernas do ecossistema Android:
 
-- **Linguagem:** Kotlin  
-- **UI:** Jetpack Compose  
-- **Arquitetura:** Clean Architecture (módulos: *data*, *domain*, *presentation*)  
-- **Gerenciamento de Estado:** ViewModel + Kotlin Flow + Compose State  
-- **Injeção de Dependência:** Koin  
-- **Rede:** Retrofit & OkHttp  
-- **Serialização:** Kotlinx Serialization  
-- **Banco de Dados (Futuro):** Room  
-
-### APIs Utilizadas
-- **CoinGecko:** Cotações e histórico de criptomoedas  
-- **AlphaVantage (futuro):** Ações e moedas tradicionais  
+- Linguagem de Programação: Kotlin
+- Interface de Usuário: Jetpack Compose (Modern UI Toolkit)
+- Arquitetura: Clean Architecture (MVVM)
+- Persistência: Room (Banco de Dados Local)
+- Gerenciamento de Estado: Jetpack ViewModel + Kotlin Flow
+- Injeção de Dependência: Koin
+- Networking: Retrofit & OkHttp
+- Serialização: Kotlinx Serialization
+- APIs Utilizadas:
+- - CoinGecko: Cotações e Histórico de Criptomoedas.
+- - AlphaVantage: Cotações de Ações e Moedas Tradicionais (Forex).
 
 ---
 
 ## 🏗️ Estrutura do Projeto
 
-A arquitetura segue o padrão **MVVM** dentro do contexto de **Clean Architecture**, garantindo separação de responsabilidades e alta testabilidade.
+A estrutura segue o padrão MVVM acoplado ao Clean Architecture, com a camada de Domínio desacoplada das implementações de Dados.
 
 ### 📁 Camadas Principais
 
@@ -46,7 +45,7 @@ A arquitetura segue o padrão **MVVM** dentro do contexto de **Clean Architectur
   - **explore:** listagem e busca  
   - **detail:** gráfico e informações históricas  
 - **ui.theme**
-  - Cores, tipografia e estilos do Compose  
+  - Cores, tipografia e estilos do Compose
 
 ---
 
@@ -54,21 +53,20 @@ A arquitetura segue o padrão **MVVM** dentro do contexto de **Clean Architectur
 
 | Funcionalidade             | Status      | Detalhes |
 |---------------------------|-------------|----------|
-| **Listagem de Cotações**  | ✅ Concluído | Exibe criptomoedas com preço e variação (24h). |
-| **Pesquisa**              | ✅ Concluído | Campo com *debounce* para otimizar requisições. |
-| **Navegação**             | ✅ Concluído | Bottom Bar (Explorar, Favoritos, Alertas). |
-| **Tela de Detalhes**      | ✅ Concluído | Mostra infos e gráfico de 7 dias via Canvas. |
-| **Injeção de Dependência**| ✅ Concluído | Koin configurado para toda a arquitetura. |
-| **Tratamento de Erros**   | ✅ Concluído | Sealed class `Resource` para loading/sucesso/erro. |
+| **Integração Multi-API**  | ✅ Concluído | Mescla cotações de CoinGecko (Crypto) e AlphaVantage (Ações/Forex). |
+| **Persistência de Favoritos**  | ✅ Concluído | Room implementado para salvar favoritos localmente. |
+| **Tela de Favoritos**              | ✅ Concluído | Listagem em tempo real e remoção de itens salvos (via Flow). |
+| **Toggle Favoritos**             | ✅ Concluído | Adicionar/remover favoritos na Tela de Detalhes. |
+| **Listagem e Busca**      | ✅ Concluído | Exibição unificada de todos os ativos com busca otimizada (debounce). |
+| **Gráfico de Histórico**| ✅ Concluído | Visualização de dados históricos (Crypto) usando Canvas. |
 
 ---
 
 ## 💡 Próximos Passos (Roadmap)
-
-- **Integração AlphaVantage:** Suporte para ações e moedas tradicionais.  
-- **Persistência (Room):** Armazenar favoritos e alertas localmente.  
-- **Tela de Favoritos:** UI e lógica para gerenciar favoritos.  
-- **Sistema de Alertas:** Alertas customizados usando WorkManager e/ou Push Notifications.
+Foco na conclusão das funcionalidades de alerta e melhoria do histórico:
+- **Sistema de Alertas:** Implementar a lógica de alertas customizáveis, utilizando WorkManager para agendamento em segundo plano. 
+- **Tela de Alertas:** Criar a UI para configuração e histórico de alertas.  
+- **Histórico AlphaVantage:** Implementar a busca de histórico de preços para Ações e Moedas.
 
 
 MIT License
