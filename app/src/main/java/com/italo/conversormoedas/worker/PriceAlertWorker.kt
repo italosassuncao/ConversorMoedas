@@ -36,7 +36,7 @@ class PriceAlertWorker(
             activeAlerts.forEach { alert ->
                 val currentAsset = response.find { it.id == alert.quotationId }
                 currentAsset?.let {
-                    val price = it.currentPrice
+                    val price = it.current_price
                     val triggered = if (alert.isAbove) price >= alert.targetPrice
                         else price <= alert.targetPrice
 
@@ -72,7 +72,7 @@ class PriceAlertWorker(
         val message = "O $symbol $direction $currentPrice (Alvo: $target)"
 
         val notification = NotificationCompat.Builder(applicationContext, channelId)
-            .setSmallIcon(android.R.drawable.ic_dialog_info) // Substituir por ícone real
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Alerta de Preço Atingido!")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

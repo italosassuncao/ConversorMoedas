@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
     version = 2,
     exportSchema = false
 )
-abstract class QuotationDatabase : RoomDatabase() {
+abstract class QuotationDB : RoomDatabase() {
     abstract fun quotationDao(): QuotationDao
     abstract fun alertDao(): AlertDao
 
