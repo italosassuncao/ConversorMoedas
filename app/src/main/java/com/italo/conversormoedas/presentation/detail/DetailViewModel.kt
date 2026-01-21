@@ -29,9 +29,11 @@ class DetailViewModel(
 
     init {
         // Se o ID for válido, busca o histórico ao iniciar
-        if (quotationId.isNotBlank()) {
-            getPriceHistory()
+        if (quotationId.isNotEmpty()) {
+            state = state.copy(isLoading = true)
+            loadInitialData()
             observeFavoriteStatus()
+            getPriceHistory()
             // Simulação: Busca dados básicos
             currentQuotation = Quotation(
                 id = quotationId,
@@ -46,6 +48,17 @@ class DetailViewModel(
 
             state = state.copy(quotationId = quotationId, name = currentQuotation!!.name)
         }
+    }
+
+    private fun loadInitialData() {
+        currentQuotation = Quotation(
+            id = quotationId,
+            name = quotationId.capitalize(),
+            symbol = quotationId.take(3).uppercase(),
+            currentPrice = 0.0,
+            priceChange24h = 0.0,
+            imageUrl = null
+        )
     }
 
     private fun observeFavoriteStatus() {
